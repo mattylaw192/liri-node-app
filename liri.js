@@ -9,7 +9,7 @@ var spotifyReq = require('node-spotify-api');
 var axios = require("axios");
 var action = process.argv[2];
 var input = process.argv[3];
-
+var fs = require("fs");
 var bandInput = "";
 var spotifyInput = "";
 var movieInput = "";
@@ -72,7 +72,7 @@ var search = function () {
 
 
                 if (spotifyInput === "") {
-                                        
+
                     spotify.search({
                         type: 'track',
                         query: "The Sign",
@@ -119,8 +119,9 @@ var search = function () {
     //Movie DB//
     else if (action === "movie-this") {
         inquirer.prompt([{
-            name: "movie",
-            message: "What movie would you like to search?"
+            type: "input",
+            name: "name",
+            message: "What movie would you like to search?",
         }]).then(function (user) {
             movieInput = user.name;
             console.log(movieInput);
@@ -134,6 +135,24 @@ var search = function () {
                 }
             );
         })
+    }
+
+    //Movie DB//
+    else if (action === "do-what-it-says") {
+
+        fs.readFile("random.txt", "utf8", function (error, data) {
+            if (error) {
+                return console.log(error);
+            }
+            console.log(data);
+            var dataArr = data.split(",");
+            console.log(dataArr);
+            spotifyInput = dataArr;
+            song();
+        })
+
+
+
     }
 };
 
